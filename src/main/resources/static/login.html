@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FahadKart — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg: #f5f0e8;
+    --card: #ffffff;
+    --ink: #1a1208;
+    --muted: #9e8f7a;
+    --accent: #e8420a;
+    --accent2: #f5a623;
+    --border: #e2d9cc;
+  }
+  body {
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    font-family: 'Outfit', sans-serif;
+    color: var(--ink);
+    overflow: hidden;
+  }
+
+  /* LEFT PANEL */
+  .left {
+    width: 45%;
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .left::before {
+    content: '';
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,66,10,0.25) 0%, transparent 65%);
+    top: -100px; left: -100px;
+  }
+  .left::after {
+    content: '';
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,166,35,0.15) 0%, transparent 65%);
+    bottom: 60px; right: -60px;
+  }
+  .brand {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+    position: relative; z-index: 1;
+  }
+  .brand span { color: var(--accent); }
+  .left-middle { position: relative; z-index: 1; }
+  .left-tag {
+    display: inline-block;
+    background: rgba(232,66,10,0.2);
+    border: 1px solid rgba(232,66,10,0.4);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .left-headline {
+    font-family: 'Syne', sans-serif;
+    font-size: 3rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    letter-spacing: -1px;
+  }
+  .left-headline em { color: var(--accent); font-style: normal; }
+  .left-sub { color: #7a6e63; font-size: 0.95rem; margin-top: 16px; line-height: 1.6; }
+  .left-footer { position: relative; z-index: 1; }
+  .features { display: flex; gap: 20px; flex-wrap: wrap; }
+  .feat {
+    display: flex; align-items: center; gap: 8px;
+    color: #5a5048; font-size: 0.82rem;
+  }
+  .feat-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+  /* RIGHT PANEL */
+  .right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    background: var(--bg);
+  }
+  .form-box { width: 100%; max-width: 400px; }
+  .form-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .form-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 36px; }
+
+  .field { margin-bottom: 20px; }
+  .field label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+  }
+  .field input {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .field input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(232,66,10,0.08);
+  }
+  .field input::placeholder { color: #c4b9ac; }
+
+  .submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+    box-shadow: 0 4px 20px rgba(232,66,10,0.3);
+    margin-top: 8px;
+  }
+  .submit-btn:hover { background: #cf3500; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(232,66,10,0.4); }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
+  .divider hr { flex: 1; border: none; border-top: 1px solid var(--border); }
+  .divider span { color: var(--muted); font-size: 0.8rem; }
+
+  .alt-link { text-align: center; color: var(--muted); font-size: 0.88rem; }
+  .alt-link a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .alt-link a:hover { text-decoration: underline; }
+
+  #msg {
+    margin-top: 14px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    display: none;
+  }
+  #msg.error { background: #fef0ee; border: 1px solid #f9ccc7; color: #c0392b; display: block; }
+  #msg.success { background: #edfaf1; border: 1px solid #b7e4c7; color: #1e8449; display: block; }
+
+  @media (max-width: 768px) {
+    .left { display: none; }
+    .right { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="left">
+  <div class="brand">Faijane<span>Kart</span></div>
+  <div class="left-middle">
+    <div class="left-tag">Welcome Back</div>
+    <div class="left-headline">Shop<br/>Without<br/><em>Limits.</em></div>
+    <div class="left-sub">Thousands of products at your fingertips. Fast delivery, easy returns.</div>
+  </div>
+  <div class="left-footer">
+    <div class="features">
+      <div class="feat"><div class="feat-dot"></div>Fast Delivery</div>
+      <div class="feat"><div class="feat-dot"></div>Easy Returns</div>
+      <div class="feat"><div class="feat-dot"></div>Secure Payments</div>
+    </div>
+  </div>
+</div>
+
+<div class="right">
+  <div class="form-box">
+    <div class="form-title">Sign in</div>
+    <div class="form-sub">Enter your credentials to continue</div>
+
+    <div class="field">
+      <label>Username</label>
+      <input type="text" id="username" placeholder="Your username" autocomplete="username"/>
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Your password" autocomplete="current-password"/>
+    </div>
+
+    <button class="submit-btn" id="loginBtn" onclick="doLogin()">Sign In</button>
+    <div id="msg"></div>
+
+    <div class="divider"><hr/><span>or</span><hr/></div>
+    <div class="alt-link">Don't have an account? <a href="register.html">Register</a></div>
+  </div>
+</div>
+
+<script>
+// Since this file is served from Spring Boot (http://localhost:8082/login.html)
+// we use relative URLs — no hardcoded port needed!
+async function doLogin() {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const msg = document.getElementById('msg');
+  const btn = document.getElementById('loginBtn');
+
+  msg.className = ''; msg.style.display = 'none';
+
+  if (!username || !password) {
+    msg.className = 'error'; msg.textContent = 'Please fill in all fields.'; return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Signing in...';
+
+  try {
+    // RELATIVE URL — works because page is served from same Spring Boot server
+    const res = await fetch(`/users/login?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`, {
+      method: 'POST'
+    });
+
+    if (res.ok) {
+      const user = await res.json();
+      console.log('Login response:', user); // debug
+
+      localStorage.setItem('userId', user.id);
+      localStorage.setItem('role', user.role || 'USER');
+      localStorage.setItem('username', user.username);
+
+      msg.className = 'success'; msg.textContent = 'Login successful! Redirecting...';
+
+      setTimeout(() => {
+        if (user.role && user.role.toUpperCase() === 'ADMIN') {
+          window.location.href = '/admin.html';
+        } else {
+          window.location.href = '/products.html';
+        }
+      }, 800);
+    } else {
+      const txt = await res.text();
+      msg.className = 'error'; msg.textContent = txt || 'Invalid username or password.';
+      btn.disabled = false; btn.textContent = 'Sign In';
+    }
+  } catch(e) {
+    msg.className = 'error'; msg.textContent = 'Server not reachable. Is Spring Boot running?';
+    btn.disabled = false; btn.textContent = 'Sign In';
+  }
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+// Redirect if already logged in
+if (localStorage.getItem('userId')) {
+  const role = localStorage.getItem('role');
+  window.location.href = role?.toUpperCase() === 'ADMIN' ? '/admin.html' : '/products.html';
+}
+</script>
+</body>
+</html>

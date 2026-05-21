@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FahadKart — Cart</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root { --bg:#f5f0e8; --card:#ffffff; --ink:#1a1208; --muted:#9e8f7a; --accent:#e8420a; --border:#e2d9cc; }
+  body { background:var(--bg); min-height:100vh; font-family:'Outfit',sans-serif; color:var(--ink); }
+
+  nav {
+    height:64px; background:var(--ink); display:flex; align-items:center;
+    justify-content:space-between; padding:0 40px; position:sticky; top:0; z-index:100;
+  }
+  .brand { font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:800; color:#fff; cursor:pointer; }
+  .brand span { color:var(--accent); }
+  .back-btn {
+    padding:8px 18px; border-radius:8px; font-family:'Syne',sans-serif; font-size:0.85rem;
+    font-weight:700; cursor:pointer; border:1px solid #333; background:transparent; color:#888;
+    transition:all 0.2s;
+  }
+  .back-btn:hover { color:#fff; border-color:#555; }
+
+  .container { max-width:900px; margin:0 auto; padding:40px; }
+
+  .page-title { font-family:'Syne',sans-serif; font-size:2.2rem; font-weight:800; letter-spacing:-0.5px; margin-bottom:8px; }
+  .page-sub { color:var(--muted); margin-bottom:36px; font-size:0.9rem; }
+
+  .layout { display:grid; grid-template-columns:1fr 340px; gap:28px; align-items:start; }
+
+  /* CART ITEMS */
+  .cart-list {}
+  .cart-item {
+    background:var(--card); border:1.5px solid var(--border); border-radius:14px;
+    padding:18px 20px; margin-bottom:14px; display:flex; align-items:center; gap:16px;
+    animation:slideIn 0.3s ease both; transition:opacity 0.3s;
+  }
+  @keyframes slideIn { from{opacity:0;transform:translateX(-12px)} to{opacity:1;transform:translateX(0)} }
+
+  .item-img {
+    width:64px; height:64px; border-radius:10px; background:#f0ebe2;
+    display:flex; align-items:center; justify-content:center; font-size:1.8rem;
+    flex-shrink:0; overflow:hidden;
+  }
+  .item-img img { width:100%; height:100%; object-fit:cover; }
+
+  .item-info { flex:1; min-width:0; }
+  .item-name { font-family:'Syne',sans-serif; font-weight:700; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .item-price { color:var(--accent); font-family:'Syne',sans-serif; font-size:1.05rem; font-weight:700; }
+
+  .remove-btn {
+    padding:7px 14px; background:transparent; border:1.5px solid #f0d0ca; color:#c0392b;
+    border-radius:8px; cursor:pointer; font-size:0.8rem; font-weight:500;
+    transition:all 0.2s; flex-shrink:0;
+  }
+  .remove-btn:hover { background:#fef0ee; border-color:#e8a09a; }
+
+  /* SUMMARY CARD */
+  .summary {
+    background:var(--ink); border-radius:16px; padding:28px; position:sticky; top:84px;
+  }
+  .summary-title { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:22px; }
+  .summary-row { display:flex; justify-content:space-between; margin-bottom:12px; font-size:0.9rem; }
+  .summary-row span:first-child { color:#7a6e63; }
+  .summary-row span:last-child { color:#e8e0d5; font-weight:500; }
+  .summary-divider { border:none; border-top:1px solid #2a2318; margin:16px 0; }
+  .summary-total { display:flex; justify-content:space-between; }
+  .summary-total span:first-child { font-family:'Syne',sans-serif; font-weight:700; color:#fff; font-size:1rem; }
+  .summary-total span:last-child { font-family:'Syne',sans-serif; font-weight:800; color:var(--accent); font-size:1.4rem; }
+
+  .checkout-btn {
+    width:100%; margin-top:20px; padding:15px; background:var(--accent); color:#fff;
+    border:none; border-radius:12px; font-family:'Syne',sans-serif; font-size:1rem;
+    font-weight:700; cursor:pointer; transition:background 0.2s, transform 0.15s;
+    box-shadow:0 4px 20px rgba(232,66,10,0.4);
+  }
+  .checkout-btn:hover { background:#cf3500; transform:translateY(-1px); }
+  .checkout-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+  .secure-note { text-align:center; margin-top:14px; color:#5a5048; font-size:0.75rem; }
+
+  /* EMPTY STATE */
+  .empty-state { grid-column:1/-1; text-align:center; padding:80px 20px; }
+  .empty-icon { font-size:5rem; margin-bottom:20px; }
+  .empty-state h2 { font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:700; margin-bottom:8px; }
+  .empty-state p { color:var(--muted); margin-bottom:28px; }
+  .shop-btn {
+    display:inline-block; padding:13px 32px; background:var(--accent); color:#fff;
+    border-radius:12px; text-decoration:none; font-family:'Syne',sans-serif;
+    font-weight:700; font-size:0.95rem; transition:background 0.2s;
+    box-shadow:0 4px 16px rgba(232,66,10,0.3);
+  }
+  .shop-btn:hover { background:#cf3500; }
+
+  /* SUCCESS MODAL */
+  .overlay {
+    display:none; position:fixed; inset:0; background:rgba(26,18,8,0.7);
+    z-index:500; align-items:center; justify-content:center; backdrop-filter:blur(4px);
+  }
+  .overlay.show { display:flex; }
+  .modal {
+    background:var(--card); border-radius:20px; padding:44px 36px; text-align:center;
+    max-width:380px; width:90%; animation:popIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes popIn { from{transform:scale(0.7);opacity:0} to{transform:scale(1);opacity:1} }
+  .modal-icon { font-size:4rem; margin-bottom:16px; }
+  .modal h2 { font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:800; margin-bottom:8px; }
+  .modal p { color:var(--muted); font-size:0.9rem; margin-bottom:4px; }
+  .modal .order-num { font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:700; color:var(--accent); margin:12px 0 24px; }
+  .modal-btn {
+    padding:13px 32px; background:var(--ink); color:#fff; border:none; border-radius:12px;
+    font-family:'Syne',sans-serif; font-weight:700; font-size:0.95rem; cursor:pointer;
+    transition:background 0.2s;
+  }
+  .modal-btn:hover { background:#3a2e22; }
+
+  @media(max-width:768px) { .layout { grid-template-columns:1fr; } .summary { position:static; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand" onclick="window.location.href='/products.html'">Faijane<span>Kart</span></div>
+  <button class="back-btn" onclick="window.location.href='/products.html'">← Continue Shopping</button>
+</nav>
+
+<div class="container">
+  <div class="page-title">Your Cart</div>
+  <div class="page-sub" id="cartSub">Loading items...</div>
+  <div class="layout" id="layout"></div>
+</div>
+
+<!-- Success Modal -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-icon">🎉</div>
+    <h2>Order Placed!</h2>
+    <p>Your order has been confirmed.</p>
+    <div class="order-num" id="orderNum"></div>
+    <p id="orderAmt" style="color:var(--accent);font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:24px;"></p>
+    <button class="modal-btn" onclick="window.location.href='/products.html'">Back to Shop</button>
+  </div>
+</div>
+
+<script>
+const userId = localStorage.getItem('userId');
+if (!userId) window.location.href = '/login.html';
+
+let cartItems = [];
+
+async function loadCart() {
+  try {
+    const res = await fetch(`/cart/${userId}`);
+    cartItems = await res.json();
+    render();
+  } catch(e) {
+    document.getElementById('layout').innerHTML =
+      `<p style="color:#e8420a;padding:40px">Failed to load cart. Server error.</p>`;
+  }
+}
+
+function render() {
+  const layout = document.getElementById('layout');
+  const sub = document.getElementById('cartSub');
+
+  if (!cartItems.length) {
+    sub.textContent = '0 items';
+    layout.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🛒</div>
+        <h2>Your cart is empty</h2>
+        <p>Browse products and add items to your cart</p>
+        <a class="shop-btn" href="/products.html">Shop Now</a>
+      </div>`;
+    return;
+  }
+
+  const total = cartItems.reduce((s, i) => s + (i.product?.price || 0), 0);
+  sub.textContent = `${cartItems.length} item${cartItems.length !== 1 ? 's' : ''} in your cart`;
+
+  layout.innerHTML = `
+    <div class="cart-list">
+      ${cartItems.map((item, idx) => `
+        <div class="cart-item" id="ci-${item.id}" style="animation-delay:${idx * 0.06}s">
+          <div class="item-img">
+            ${item.product?.imageUrl
+              ? `<img src="${item.product.imageUrl}" onerror="this.parentElement.textContent='📦'" alt=""/>`
+              : '📦'}
+          </div>
+          <div class="item-info">
+            <div class="item-name">${item.product?.name || 'Product'}</div>
+            <div class="item-price">₹${(item.product?.price || 0).toFixed(2)}</div>
+          </div>
+          <button class="remove-btn" onclick="removeItem(${item.id})">✕ Remove</button>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="summary">
+      <div class="summary-title">Order Summary</div>
+      <div class="summary-row"><span>Subtotal (${cartItems.length} items)</span><span>₹${total.toFixed(2)}</span></div>
+      <div class="summary-row"><span>Delivery</span><span style="color:#66bb6a">FREE</span></div>
+      <div class="summary-row"><span>Tax</span><span>₹0.00</span></div>
+      <hr class="summary-divider"/>
+      <div class="summary-total">
+        <span>Total</span>
+        <span>₹${total.toFixed(2)}</span>
+      </div>
+      <button class="checkout-btn" id="checkoutBtn" onclick="checkout()">Place Order →</button>
+      <div class="secure-note">🔒 Secure checkout</div>
+    </div>
+  `;
+}
+
+async function removeItem(cartId) {
+  const el = document.getElementById(`ci-${cartId}`);
+  el.style.opacity = '0.4';
+  try {
+    await fetch(`/cart/remove/${cartId}`, { method: 'DELETE' });
+    cartItems = cartItems.filter(i => i.id !== cartId);
+    render();
+  } catch(e) {
+    el.style.opacity = '1';
+    alert('Failed to remove item.');
+  }
+}
+
+async function checkout() {
+  const btn = document.getElementById('checkoutBtn');
+  btn.disabled = true; btn.textContent = 'Placing order...';
+  try {
+    const res = await fetch(`/buy/checkout?userId=${userId}`, { method: 'POST' });
+    const data = await res.json();
+    if (res.ok) {
+      document.getElementById('orderNum').textContent = `Order #${data.orderId}`;
+      document.getElementById('orderAmt').textContent = `Total: ₹${data.totalAmount.toFixed(2)}`;
+      document.getElementById('overlay').classList.add('show');
+    } else {
+      alert(data.message || 'Checkout failed.');
+      btn.disabled = false; btn.textContent = 'Place Order →';
+    }
+  } catch(e) {
+    alert('Server error. Please try again.');
+    btn.disabled = false; btn.textContent = 'Place Order →';
+  }
+}
+
+loadCart();
+</script>
+</body>
+</html>

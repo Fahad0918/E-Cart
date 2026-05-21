@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FahadKart — Register</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg: #f5f0e8; --card: #ffffff; --ink: #1a1208;
+    --muted: #9e8f7a; --accent: #e8420a; --border: #e2d9cc;
+  }
+  body { background:var(--bg); min-height:100vh; display:flex; font-family:'Outfit',sans-serif; color:var(--ink); overflow:hidden; }
+
+  .left {
+    width:45%; background:var(--ink); display:flex; flex-direction:column;
+    justify-content:space-between; padding:48px; position:relative; overflow:hidden;
+  }
+  .left::before {
+    content:''; position:absolute; width:400px; height:400px; border-radius:50%;
+    background:radial-gradient(circle,rgba(232,66,10,0.2) 0%,transparent 65%);
+    bottom:-80px; right:-80px;
+  }
+  .brand { font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; color:#fff; position:relative; z-index:1; }
+  .brand span { color:var(--accent); }
+  .left-middle { position:relative; z-index:1; }
+  .left-tag {
+    display:inline-block; background:rgba(232,66,10,0.2); border:1px solid rgba(232,66,10,0.4);
+    color:var(--accent); font-size:0.72rem; font-weight:500; letter-spacing:2px;
+    text-transform:uppercase; padding:5px 14px; border-radius:20px; margin-bottom:20px;
+  }
+  .left-headline { font-family:'Syne',sans-serif; font-size:3rem; font-weight:800; color:#fff; line-height:1.1; letter-spacing:-1px; }
+  .left-headline em { color:var(--accent); font-style:normal; }
+  .left-sub { color:#7a6e63; font-size:0.95rem; margin-top:16px; line-height:1.6; }
+  .left-footer { position:relative; z-index:1; color:#5a5048; font-size:0.82rem; line-height:1.8; }
+
+  .right { flex:1; display:flex; align-items:center; justify-content:center; padding:40px; overflow-y:auto; }
+  .form-box { width:100%; max-width:400px; padding:10px 0; }
+  .form-title { font-family:'Syne',sans-serif; font-size:1.9rem; font-weight:700; margin-bottom:6px; }
+  .form-sub { color:var(--muted); font-size:0.9rem; margin-bottom:32px; }
+
+  .field { margin-bottom:18px; }
+  .field label { display:block; font-size:0.78rem; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:7px; }
+  .field input, .field select {
+    width:100%; padding:13px 16px; background:var(--card); border:1.5px solid var(--border);
+    border-radius:12px; font-family:'Outfit',sans-serif; font-size:0.95rem;
+    color:var(--ink); outline:none; transition:border-color 0.2s, box-shadow 0.2s;
+  }
+  .field input:focus, .field select:focus {
+    border-color:var(--accent); box-shadow:0 0 0 3px rgba(232,66,10,0.08);
+  }
+  .field input::placeholder { color:#c4b9ac; }
+
+  .row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+
+  .submit-btn {
+    width:100%; padding:15px; background:var(--accent); color:#fff; border:none;
+    border-radius:12px; font-family:'Syne',sans-serif; font-size:1rem; font-weight:700;
+    cursor:pointer; transition:transform 0.15s, box-shadow 0.2s, background 0.2s;
+    box-shadow:0 4px 20px rgba(232,66,10,0.3); margin-top:6px;
+  }
+  .submit-btn:hover { background:#cf3500; transform:translateY(-1px); box-shadow:0 6px 24px rgba(232,66,10,0.4); }
+  .submit-btn:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+
+  .divider { display:flex; align-items:center; gap:12px; margin:18px 0; }
+  .divider hr { flex:1; border:none; border-top:1px solid var(--border); }
+  .divider span { color:var(--muted); font-size:0.8rem; }
+
+  .alt-link { text-align:center; color:var(--muted); font-size:0.88rem; }
+  .alt-link a { color:var(--accent); text-decoration:none; font-weight:600; }
+
+  #msg { margin-top:12px; padding:10px 14px; border-radius:8px; font-size:0.85rem; display:none; }
+  #msg.error { background:#fef0ee; border:1px solid #f9ccc7; color:#c0392b; display:block; }
+  #msg.success { background:#edfaf1; border:1px solid #b7e4c7; color:#1e8449; display:block; }
+
+  @media(max-width:768px) { .left { display:none; } .right { padding:24px; } }
+</style>
+</head>
+<body>
+
+<div class="left">
+  <div class="brand">Faijane<span>Kart</span></div>
+  <div class="left-middle">
+    <div class="left-tag">Join Us</div>
+    <div class="left-headline">Start<br/>Shopping<br/><em>Today.</em></div>
+    <div class="left-sub">Create your account in seconds. Access thousands of products instantly.</div>
+  </div>
+  <div class="left-footer">
+    ✦ Free account forever<br/>
+    ✦ No hidden charges<br/>
+    ✦ Cancel anytime
+  </div>
+</div>
+
+<div class="right">
+  <div class="form-box">
+    <div class="form-title">Create Account</div>
+    <div class="form-sub">Fill in the details below to get started</div>
+
+    <div class="field">
+      <label>Username</label>
+      <input type="text" id="username" placeholder="Choose a username"/>
+    </div>
+    <div class="field">
+      <label>Email Address</label>
+      <input type="email" id="email" placeholder="your@email.com"/>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Create password"/>
+      </div>
+      <div class="field">
+        <label>Role</label>
+        <select id="role">
+          <option value="USER">User</option>
+          <option value="ADMIN">Admin</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="submit-btn" id="regBtn" onclick="doRegister()">Create Account</button>
+    <div id="msg"></div>
+
+    <div class="divider"><hr/><span>or</span><hr/></div>
+    <div class="alt-link">Already have an account? <a href="login.html">Sign in</a></div>
+  </div>
+</div>
+
+<script>
+async function doRegister() {
+  const msgEl = document.getElementById('msg');
+  const btn   = document.getElementById('regBtn');
+  msgEl.className = ''; msgEl.style.display = 'none';
+
+  const body = {
+    username: document.getElementById('username').value.trim(),
+    email:    document.getElementById('email').value.trim(),
+    password: document.getElementById('password').value.trim(),
+    role:     document.getElementById('role').value
+  };
+
+  if (!body.username || !body.email || !body.password) {
+    msgEl.className = 'error'; msgEl.textContent = 'Please fill in all fields.'; return;
+  }
+  if (body.password.length < 4) {
+    msgEl.className = 'error'; msgEl.textContent = 'Password must be at least 4 characters.'; return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Creating account...';
+
+  try {
+    const res = await fetch('/users/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    const txt = await res.text();
+
+    if (res.ok || res.status === 201) {
+      msgEl.className = 'success'; msgEl.textContent = 'Account created! Redirecting to login...';
+      setTimeout(() => window.location.href = '/login.html', 1500);
+    } else if (res.status === 409) {
+      msgEl.className = 'error'; msgEl.textContent = 'Username already taken. Try another.';
+      btn.disabled = false; btn.textContent = 'Create Account';
+    } else {
+      msgEl.className = 'error'; msgEl.textContent = txt || 'Registration failed. Try again.';
+      btn.disabled = false; btn.textContent = 'Create Account';
+    }
+  } catch(e) {
+    msgEl.className = 'error'; msgEl.textContent = 'Server not reachable. Is Spring Boot running?';
+    btn.disabled = false; btn.textContent = 'Create Account';
+  }
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') doRegister(); });
+</script>
+</body>
+</html>
